@@ -21,8 +21,8 @@
         </div>
     </div>
 
-    <div class="bg-gray-200  w-full h-[80vh]" style="background: url(https://cdn.prod.website-files.com/65258e8681b80e99173d058a/6563941380f3c207d7af9ec7_4-unexpected-benefits-of-volunteering-2.jpeg); background-repeat: no-repeat; background-size:cover ;">
-     <div class="absolute bg-black opacity-75 w-full h-[80vh]"></div>
+    <div class="bg-gray-200 sticky  w-full h-[100vh]" style="background: url(https://cdn.prod.website-files.com/65258e8681b80e99173d058a/6563941380f3c207d7af9ec7_4-unexpected-benefits-of-volunteering-2.jpeg); background-repeat: no-repeat; background-size:cover ;">
+     <div class="absolute bg-black opacity-75 w-full h-[100vh]"></div>
      <div class="flex relative items-center justify-center  flex-col h-[70vh] w-full">
         <span class="text-white font-semibold self-center p-3 justify-self-center text-center text-5xl">Welcome to Fundraisers</span>
         <span class="text-xl text-center text-white self-center p-3"><i>Find Help, Donate Funds and Change Lives</i></span>
@@ -32,7 +32,7 @@
     </div>
 
 
-    <div id="about" class="flex flex-col w-full p-6">
+    <div id="about" class="flex flex-col h-[100vh] mb-8 w-full p-6">
         <h1 class="text-gray-900 font-bold p-6 text-5xl m-6 text-center">Who Are We?</h1>
         <div class="flex  justify-center w-full">
             <img src="https://regenbrampton.com/wp-content/uploads/2021/07/Volunteer-people-donation-2-1024x672.jpeg" alt="" class="w-[500px] h-[500px] rounded-lg">
@@ -56,5 +56,25 @@ Join us in our mission to make fundraising accessible and impactful for everyone
         </div>
 
     </div>
+
+    <div class="flex flex-col mt-6">
+        <h1 class="text-5xl font-bold text-center text-gray-900">Active Fundraisers</h1>
+        <div class="flex w-full ">
+
+        </div>
+    </div>
+
+
+    <script>
+          const getFundraisers = async () => {
+        const req = await fetch('http://127.0.01:8080/api/fundraisers/');
+        const res = await req.json();
+        return res;
+    };
+
+    getFundraisers().then(fundraisers => {
+        console.log(fundraisers);
+    });
+    </script>
 </body>
 </html>
