@@ -118,7 +118,7 @@
             const currentUrl = window.location.href;
             const url = new URL(currentUrl);
             const segments = url.pathname.split('/');
-            const fundraiserId = segments[segments.length - 1]; // This will be '5'
+            const fundraiserId = segments[segments.length - 1]; 
             const apiUrl = `http://localhost:8080/api/fundraisers/${fundraiserId}`;
             
             fetch(apiUrl)
@@ -129,9 +129,7 @@
                     return response.json();
                 })
                 .then(data => {
-                    const fundraiser = data[0]; // Access the first (and only) fundraiser object
-                    
-                    // Populate the HTML with fundraiser data
+                    const fundraiser = data[0]; 
                     document.querySelector('.fundraiser-info h2').textContent = fundraiser.caption;
                     document.querySelector('.fundraiser-info p:nth-of-type(1)').textContent = `Organizer: ${fundraiser.organizer}`;
                     document.querySelector('.fundraiser-info p:nth-of-type(2)').textContent = `City: ${fundraiser.city}`;
