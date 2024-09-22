@@ -56,25 +56,100 @@ Join us in our mission to make fundraising accessible and impactful for everyone
         </div>
 
     </div>
-
-    <div class="flex flex-col mt-6">
-        <h1 class="text-5xl font-bold text-center text-gray-900">Active Fundraisers</h1>
-        <div class="flex w-full ">
-
+    <div id="fundraisers" class="flex flex-col mt-6 p-6 h-[100vh]">
+        <h1 class="text-5xl font-bold text-center text-gray-900">Active Fundraisings</h1>
+        <div class="fundraisers-container flex flex-wrap justify-center gap-6 mt-8">
+            <!-- Fundraisers will be dynamically inserted here -->
         </div>
     </div>
+    <!-- Contact Section -->
+<div class="contact-section bg-gray-100 py-12">
+    <h2 class="text-4xl font-bold text-center text-gray-800">Get In Touch</h2>
+    <p class="text-lg text-center text-gray-600 mt-2">We'd love to hear from you! Please fill out the form below.</p>
 
+    <div class="mt-8 max-w-3xl mx-auto">
+        <form class="bg-white shadow-md rounded-lg px-8 py-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Your Name</label>
+                    <input class="w-full p-3 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500" id="name" type="text" placeholder="John Doe" />
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Your Email</label>
+                    <input class="w-full p-3 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500" id="email" type="email" placeholder="johndoe@example.com" />
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="message">Message</label>
+                <textarea class="w-full p-3 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500" id="message" rows="6" placeholder="Your message here..."></textarea>
+            </div>
+
+            <div class="mt-6 text-center">
+                <button class="bg-green-500 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-600 transition duration-300">
+                    Send Message
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 
     <script>
-          const getFundraisers = async () => {
-        const req = await fetch('http://127.0.01:8080/api/fundraisers/');
-        const res = await req.json();
-        return res;
-    };
-
-    getFundraisers().then(fundraisers => {
-        console.log(fundraisers);
-    });
+        const getFundraisers = async () => {
+            const req = await fetch('http://127.0.01:8080/api/fundraisers/');
+            const res = await req.json();
+            return res;
+        };
+    
+        const renderFundraisers = (fundraisers) => {
+            const container = document.querySelector('.fundraisers-container');
+    
+            fundraisers.forEach(fundraiser => {
+                const fundraiserCard = `
+                <a href="/fundraisers/${fundraiser.id}">
+                    <div class="fundraiser-card p-6 max-w-sm w-full bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-2">${fundraiser.caption}</h2>
+                        <p class="text-lg text-gray-600 mb-1"><strong>Organizer:</strong> ${fundraiser.organizer}</p>
+                        <p class="text-lg text-gray-600 mb-1"><strong>City:</strong> ${fundraiser.city}</p>
+                        <div class="mt-4">
+                            <p class="text-lg text-green-600 font-semibold">Raised: $${fundraiser.current_fund.toLocaleString()}</p>
+                            <p class="text-lg text-gray-500">Goal: $${fundraiser.target_fund.toLocaleString()}</p>
+                        </div>
+                        <div class="relative w-full bg-gray-200 h-2 rounded-full mt-4">
+                            <div class="absolute top-0 left-0 h-2 bg-green-500 rounded-full" style="width: ${(fundraiser.current_fund / fundraiser.target_fund) * 100}%"></div>
+                        </div>
+                        <div class="flex justify-end mt-3  w-full">
+                        <a class="p-3 self-center justify-self-end rounded-lg bg-blue-600 text-white font-bold" href="/fundraisers/${fundraiser.id}"/>View</a>
+                        </div>
+                    </div>
+                    </a>
+                `;
+                container.innerHTML += fundraiserCard;
+            });
+        };
+    
+        getFundraisers().then(fundraisers => {
+            renderFundraisers(fundraisers);
+        });
     </script>
+    
+    <style>
+        .fundraiser-card {
+            width: calc(33.333% - 1rem);
+            min-width: 280px;
+        }
+    
+        @media (max-width: 1024px) {
+            .fundraiser-card {
+                width: calc(50% - 1rem);
+            }
+        }
+    
+        @media (max-width: 640px) {
+            .fundraiser-card {
+                width: 100%;
+            }
+        }
+    </style>
 </body>
 </html>
