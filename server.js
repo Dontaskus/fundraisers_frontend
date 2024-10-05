@@ -22,7 +22,21 @@ const server = http.createServer((req, res) => {
                 res.end(content);
             }
         });
-    } else if (url === '/search') {
+    }else if (url.startsWith("/donate/")){
+        const filePath = path.join(__dirname, 'pages', 'donate.html'); 
+        
+        // Reading the HTML file for the donate page
+        fs.readFile(filePath, (err, content) => {
+            if (err) {
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Server Error');
+            } else {
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.end(content);
+            }
+        });
+
+    }  else if (url === '/search') {
         const filePath = path.join(__dirname, 'pages', 'search.html'); 
         
         // Reading the HTML file for the search page
