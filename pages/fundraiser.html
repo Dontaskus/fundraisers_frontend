@@ -37,22 +37,29 @@
         <h1 class="text-5xl font-bold text-center text-gray-900 mb-8">Fundraiser Details</h1>
         <div class="fundraiser-detail-container flex justify-center gap-6">
             <div class="fundraiser-info p-6 max-w-lg w-full bg-white rounded-xl shadow-lg">
-                <h2 class="text-2xl font-bold text-gray-800 mb-4">Support Local Health Initiatives</h2>
-                <p class="text-lg text-gray-600 mb-3"><strong>Organizer:</strong> Health NGO</p>
-                <p class="text-lg text-gray-600 mb-3"><strong>City:</strong> New York</p>
-                <div class="mt-4">
-                    <p class="text-lg text-green-600 font-semibold">Raised: $50,000</p>
-                    <p class="text-lg text-gray-500">Goal: $100,000</p>
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Loading</h2>
+                <p id="organizer" class="text-lg text-gray-600 mb-3"><strong>Organizer:</strong> </p>
+                <p id="city" class="text-lg text-gray-600 mb-3"><strong>City:</strong> Loading</p>
+                <div  class="mt-4">
+                    <p id="current_fund" class="text-lg text-green-600 font-semibold">Raised: Loading...</p>
+                    <p id="goal" class="text-lg text-gray-500">Goal: Loading...</p>
                 </div>
                 <div class="relative w-full bg-gray-200 h-2 rounded-full mt-4">
                     <div class="absolute top-0 left-0 h-2 bg-green-500 rounded-full" style="width: 50%;"></div>
                 </div>
                 <div class="flex justify-center mt-6">
-                    <a class="p-3 rounded-lg bg-blue-600 text-white font-bold hover:bg-blue-500" href="/">Donate Now</a>
+                    <a id="btn" class="p-3 rounded-lg bg-blue-600 text-white font-bold hover:bg-blue-500" href="/">Donate Now</a>
                 </div>
             </div>
         </div>
     </div>
+    <!-- Donations Section -->
+<div class="donations-section mt-6 p-6 bg-gray-50">
+    <h2 class="text-3xl font-bold text-gray-800 mb-4">Donations</h2>
+    <div class="donations-list">
+        
+    </div> 
+</div>
     <div id="contact" class="contact-section mt-[5rem] bg-gray-100 py-12">
         <h2 class="text-4xl font-bold text-center text-gray-800">Get In Touch</h2>
         <p class="text-lg text-center text-gray-600 mt-2">We'd love to hear from you! Please fill out the form below.</p>
@@ -120,7 +127,8 @@
             const segments = url.pathname.split('/');
             const fundraiserId = segments[segments.length - 1]; 
             const apiUrl = `http://localhost:8080/api/fundraisers/${fundraiserId}`;
-            
+            const btn= document.getElementById('btn')
+            btn.href=`/donate/${fundraiserId}`
             fetch(apiUrl)
                 .then(response => {
                     if (!response.ok) {
@@ -128,21 +136,51 @@
                     }
                     return response.json();
                 })
-                .then(data => {
-                    const fundraiser = data[0]; 
-                    document.querySelector('.fundraiser-info h2').textContent = fundraiser.caption;
-                    document.querySelector('.fundraiser-info p:nth-of-type(1)').textContent = `Organizer: ${fundraiser.organizer}`;
-                    document.querySelector('.fundraiser-info p:nth-of-type(2)').textContent = `City: ${fundraiser.city}`;
-                    document.querySelector('.fundraiser-info p:nth-of-type(3)').textContent = `Raised: $${fundraiser.current_fund}`;
-                    document.querySelector('.fundraiser-info p:nth-of-type(4)').textContent = `Goal: $${fundraiser.target_fund}`;
-    
-                    const progressPercentage = (fundraiser.current_fund / fundraiser.target_fund) * 100;
-                    document.querySelector('.fundraiser-info .bg-green-500').style.width = `${progressPercentage}%`;
-                })
+                .then(fundraiser => {
+                    const fundraiserInfo = document.querySelector('.fundraiser-info');
+                    if (!fundraiserInfo) {
+                        throw new Error('Fundraiser details container not found');
+                    }
+        
+                    const progressBar = document.querySelector('.fundraiser-info .bg-green-500');
+                    const donationsContainer = document.querySelector('.donations-list');
+                    if (!donationsContainer) {
+                        throw new Error('Donations list container not found');
+                    }
+        
+                    fundraiser.donations.forEach(donation => {
+                        console.log('I am here')
+                        const donationElement = document.createElement('div');
+                        donationElement.classList.add('donation-item', 'bg-gray-100', 'p-3', 'rounded-lg', 'mb-3');
+        
+                        const donationDate = new Date(donation.date);
+                        const isValidDate = !isNaN(donationDate.getTime());
+        
+                        donationElement.innerHTML = `
+                            <p><strong>Donor:</strong> ${donation.giver || 'Anonymous'}</p>
+                            <p><strong>Amount:</strong> $${donation.amount || 0}</p>
+                            <p><strong>Date:</strong> ${donationDate.toLocaleDateString()} </p>
+                        `;
+                        
+                        donationsContainer.appendChild(donationElement);
+                    });
+
+                    // Display fundraiser details
+                    fundraiserInfo.querySelector('h2').textContent = fundraiser.caption || 'No caption available';
+                    fundraiserInfo.querySelector('#organizer').textContent = `Organizer: ${fundraiser.organizer || 'Unknown'}`;
+                    fundraiserInfo.querySelector('#city').textContent = `City: ${fundraiser.city || 'Unknown'}`;
+                    fundraiserInfo.querySelector('#current_fund').textContent = `Raised: $${fundraiser.current_fund || 0}`;
+                    fundraiserInfo.querySelector('#goal').textContent = `Goal: $${fundraiser.target_fund || 0}`;
+        
+                    const progressPercentage = (fundraiser.current_fund / fundraiser.target_fund) * 100 || 0;
+                    progressBar.style.width = `${progressPercentage}%`;
+        
+                                    })
                 .catch(error => {
                     console.error('There was a problem with the fetch operation:', error);
                 });
         });
-    </script>
+        </script>
+        
 </body>
 </html>    
