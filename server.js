@@ -36,6 +36,21 @@ const server = http.createServer((req, res) => {
             }
         });
 
+    } else if(url === "/admin"){
+        const filePath = path.join(__dirname, 'pages', 'admin.html'); 
+        
+        // Reading the HTML file for the admin page
+        fs.readFile(filePath, (err, content) => {
+            if (err) {
+                res.writeHead(500, { 'Content-Type': 'text/plain' });
+                res.end('Server Error');
+            } else {
+                res.writeHead(200, { 'Content-Type': 'text/html' });
+                res.end(content);
+            }
+        });
+
+
     }  else if (url === '/search') {
         const filePath = path.join(__dirname, 'pages', 'search.html'); 
         
