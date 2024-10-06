@@ -6,7 +6,7 @@
     <title>Home Page</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="overflow-auto">
+<body class="overflow-auto flex flex-col">
     <div class="flex w-full bg-black z-2 fixed justify-between shadow-md p-6" style="z-index: 4;">
         <div class="justify-self-start">
             <span class="text-3xl text-center text-white font-bold">Fundraisers<span class="text-[40px]">.</span></span>
@@ -63,14 +63,14 @@
     </div>
 </div>
 
-    <div id="fundraisers" class="flex flex-col mt-6 mb-6 p-6 h-[100vh]">
+    <div id="fundraisers" class="flex flex-col overflow-auto mt-6 mb-6 p-6 h-[100vh]">
         <h1 class="text-5xl font-bold text-center text-gray-900">Active Fundraisings</h1>
         <div class="fundraisers-container flex flex-wrap justify-center gap-6 mt-8">
             <!-- Fundraisers will be dynamically inserted here -->
         </div>
     </div>
     <!-- Testimonial Section -->
-<div class="testimonial-section bg-white py-12">
+<div class="testimonial-section my-6 bg-white py-12">
     <h2 class="text-4xl font-bold text-center text-gray-800">What People Say</h2>
     <p class="text-lg text-center text-gray-600 mt-2">See how others have benefited from our platform</p>
 
@@ -192,7 +192,7 @@
             fundraisers.forEach(fundraiser => {
                 const fundraiserCard = `
                 <a href="/fundraisers/${fundraiser.id}">
-                    <div class="fundraiser-card p-6 max-w-sm w-full bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
+                    <div class="fundraiser-card p-6 max-w-sm mb-6 w-full bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300">
                         <h2 class="text-2xl font-bold text-gray-800 mb-2">${fundraiser.caption}</h2>
                         <p class="text-lg text-gray-600 mb-1"><strong>Organizer:</strong> ${fundraiser.organizer}</p>
                         <p class="text-lg text-gray-600 mb-1"><strong>City:</strong> ${fundraiser.city}</p>
